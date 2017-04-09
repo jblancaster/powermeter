@@ -1,0 +1,26 @@
+--- a/drivers/usb/musb/musb_dsps.c	2015-08-18 21:21:07.722512013 -0600
++++ b/drivers/usb/musb/musb_dsps.c.new	2015-08-18 21:20:35.954511536 -0600
+@@ -239,10 +239,20 @@
+ 	spin_lock_irqsave(&musb->lock, flags);
+ 	switch (musb->xceiv->state) {
+ 	case OTG_STATE_A_WAIT_BCON:
+-		dsps_writeb(musb->mregs, MUSB_DEVCTL, 0);
+-		skip_session = 1;
++		/*
++		 * We need to avoid stopping the session in host mode,
++		 * otherwise we don't see any newly connected devices
++		 */
++		if (!is_host_active(musb)) {
++			devctl &= ~MUSB_DEVCTL_SESSION;
++			dsps_writeb(musb->mregs, MUSB_DEVCTL, devctl);
++			break;
++		}
++		else {
++			dsps_writeb(musb->mregs, MUSB_DEVCTL, 0);
++			skip_session = 1;
++		}
+ 		/* fall */
+-
+ 	case OTG_STATE_A_IDLE:
+ 	case OTG_STATE_B_IDLE:
+ 		if (devctl & MUSB_DEVCTL_BDEVICE) {

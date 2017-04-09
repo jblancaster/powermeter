@@ -18,3 +18,11 @@ COMPATIBLE_MACHINE_genericx86-64 = "genericx86-64"
 COMPATIBLE_MACHINE_edgerouter = "edgerouter"
 COMPATIBLE_MACHINE_beaglebone = "beaglebone"
 COMPATIBLE_MACHINE_mpc8315e-rdb = "mpc8315e-rdb"
+
+KBUILD_DEFCONFIG_KMACHINE ?= "file://defconfig"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+
+SRC_URI += "  \
+	file://defconfig \
+	file://0001-musb-dsps.patch \
+	"

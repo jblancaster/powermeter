@@ -59,4 +59,4 @@ if [ -z "$BBSERVER" ] && [ -f bitbake.lock ] ; then
 	BBSERVER=`cat bitbake.lock` bitbake -m
     fi
 fi
-
+export PATH=/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:$PATH
